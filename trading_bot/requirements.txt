@@ -1,0 +1,9 @@
+requests
+beautifulsoup4
+pandas
+textblob
+tensorflow
+keras
+stable-baselines3
+gym
+telegram
