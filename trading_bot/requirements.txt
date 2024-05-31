@@ -1,9 +1,8 @@
-requests
-beautifulsoup4
+ccxt
 pandas
-textblob
-tensorflow
-keras
-stable-baselines3
-gym
-telegram
+numpy
+talib
+requests
+openai
+google-cloud-logging
+google-cloud-monitoring
