@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+<head>
+    <title>Arbitrage Trading</title>
+</head>
+<body>
+    <h1>Arbitrage Trading Opportunities</h1>
+    <h2>Current Prices</h2>
+    <ul>
+        {% for exchange, price_dict in prices.items() %}
+            <li>{{ exchange }}:
+                <ul>
+                    {% for symbol, price in price_dict.items() %}
+                        <li>{{ symbol }}: {{ price }}</li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+    <h2>Arbitrage Opportunities</h2>
+    <ul>
+        {% for opportunity in opportunities %}
+            <li>Buy {{ opportunity.symbol }} on {{ opportunity.buy_exchange }} at {{ opportunity.buy_price }},
+                sell on {{ opportunity.sell_exchange }} at {{ opportunity.sell_price }},
+                profit: {{ opportunity.profit }}
+                <form action="/execute" method="post">
+                    <input type="hidden" name="opportunity" value="{{ opportunity }}">
+                    <input type="number" name="amount" step="0.01" min="0" required>
+                    <button type="submit">Execute</button>
+                </form>
+            </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
