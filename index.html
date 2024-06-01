@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trading Bot Chat</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        #chat {
+            width: 400px;
+            height: 500px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            overflow-y: auto;
+        }
+        #messages {
+            height: 450px;
+            overflow-y: auto;
+        }
+        input {
+            width: calc(100% - 20px);
+            padding: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Trading Bot Chat</h1>
+    <div id="chat">
+        <div id="messages"></div>
+        <input type="text" id="userInput" placeholder="Enter your question...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        async function sendMessage() {
+            const userInput = document.getElementById("userInput").value;
+            document.getElementById("userInput").value = "";
+
+            const messageDiv = document.createElement("div");
+            messageDiv.textContent = "You: " + userInput;
+            document.getElementById("messages").appendChild(messageDiv);
+
+            try {
+                const response = await axios.post('http://localhost:5000/chat', {
+                    prompt: userInput
+                });
+
+                const botMessageDiv = document.createElement("div");
+                botMessageDiv.textContent = "Bot: " + response.data;
+                document.getElementById("messages").appendChild(botMessageDiv);
+            } catch (error) {
+                console.error("Error sending message: ", error);
+            }
+        }
+    </script>
+</body>
+</html>
