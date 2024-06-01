@@ -1,35 +1,59 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
 <head>
-    <title>Arbitrage Trading</title>
+    <title>Trading Bot Chat</title>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        #chat {
+            width: 400px;
+            height: 500px;
+            border: 1px solid #ccc;
+            padding: 10px;
+            overflow-y: auto;
+        }
+        #messages {
+            height: 450px;
+            overflow-y: auto;
+        }
+        input {
+            width: calc(100% - 20px);
+            padding: 10px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Arbitrage Trading Opportunities</h1>
-    <h2>Current Prices</h2>
-    <ul>
-        {% for exchange, price_dict in prices.items() %}
-            <li>{{ exchange }}:
-                <ul>
-                    {% for symbol, price in price_dict.items() %}
-                        <li>{{ symbol }}: {{ price }}</li>
-                    {% endfor %}
-                </ul>
-            </li>
-        {% endfor %}
-    </ul>
-    <h2>Arbitrage Opportunities</h2>
-    <ul>
-        {% for opportunity in opportunities %}
-            <li>Buy {{ opportunity.symbol }} on {{ opportunity.buy_exchange }} at {{ opportunity.buy_price }},
-                sell on {{ opportunity.sell_exchange }} at {{ opportunity.sell_price }},
-                profit: {{ opportunity.profit }}
-                <form action="/execute" method="post">
-                    <input type="hidden" name="opportunity" value="{{ opportunity }}">
-                    <input type="number" name="amount" step="0.01" min="0" required>
-                    <button type="submit">Execute</button>
-                </form>
-            </li>
-        {% endfor %}
-    </ul>
+    <h1>Trading Bot Chat</h1>
+    <div id="chat">
+        <div id="messages"></div>
+        <input type="text" id="userInput" placeholder="Enter your question...">
+        <button onclick="sendMessage()">Send</button>
+    </div>
+
+    <script>
+        async function sendMessage() {
+            const userInput = document.getElementById("userInput").value;
+            document.getElementById("userInput").value = "";
+
+            const messageDiv = document.createElement("div");
+            messageDiv.textContent = "You: " + userInput;
+            document.getElementById("messages").appendChild(messageDiv);
+
+            try {
+                const response = await axios.post('YOUR_BACKEND_API_ENDPOINT', {
+                    prompt: userInput
+                }, {
+                    headers: {
+                        'Authorization': `Bearer YOUR_OPENAI_API_KEY`
+                    }
+                });
+
+                const botMessageDiv = document.createElement("div");
+                botMessageDiv.textContent = "Bot: " + response.data;
+                document.getElementById("messages").appendChild(botMessageDiv);
+            } catch (error) {
+                console.error("Error sending message: ", error);
+            }
+        }
+    </script>
 </body>
 </html>
